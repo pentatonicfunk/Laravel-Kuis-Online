@@ -1,0 +1,13 @@
+<?php
+
+class Image extends Eloquent
+{
+    public $timestamps = true;
+    protected $softDelete = true;
+
+    public function imageable()
+    {
+        return $this->morphTo();
+    }
+
+}

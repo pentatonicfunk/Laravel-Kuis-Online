@@ -1,0 +1,27 @@
+1. Pastikan telah menginstall local web server (xampp / wampp / lamp, etc)
+2. Pastikan Service Web Server dan MysqlServer telah dalam keadaan menyala
+3. Salin folder "aegis kuis" pada direkori htdocs (ex . xampp/htdocs )
+4. Buat database dengan nama "kuis" pada mysql server
+5. Import kuis.sql ke dalam database kuis
+6. Jika anda menggunakan nama database lain atau user mysql yang lain sunting file HTDOCS/aegis-kuis/app/config/database.php (baris 55)
+7. Buka pada browser dengan alamat http://localhost/aegis-kuis/public
+
+Default user
+Admin
+user : admin@demo.com
+password : admin
+
+User Biasa
+user : user@user.com
+password : user
+user : bambang@user.com
+password : bambang
+
+
+Enhanced Features :
+- mobile ready
+- sistem sudah termasuk untuk administrasi bank soal (kelola soal, kelola kuis, dll)
+- sistem hanya mengijinkan 1 user login pada 1 tempat dan 1 browser (mencegah user yang sama membuka aplikasi di browser / komputer berbeda)
+- User diizinkin melanjutkan mengerjakan kuis, asal batas waktu belum selesai, (misal user kehilangan koneksi internet, komputer mati, dll)
+- Setelah user mengambil sebuah kuis, user tidak dapat mengambil kuis yang sama, kecuali admin menghapus riwayat pengambilan user tersebut terjadap kuis yang dimaksud
+- dan banyak lagi, selamat mencoba!

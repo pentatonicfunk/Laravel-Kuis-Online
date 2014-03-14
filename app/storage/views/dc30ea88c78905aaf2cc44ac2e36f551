@@ -1,0 +1,104 @@
+<?php $__env->startSection('content'); ?>
+<!-- Main component for a primary marketing message or call to action -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2>Daftar Kuis
+            <small>(<?php echo $count; ?>)</small>
+        </h2>
+    </div>
+    <div class="panel-body">
+
+        <?php if (Session::has('messages')): ?>
+        <?php foreach (Session::get('messages') as $message): ?>
+        <?php if ($message[0] == 'error'): ?>
+        <div class="alert alert-danger"><?php echo $message[1]; ?></div>
+        <?php elseif ($message[0] == 'success'): ?>
+        <div class="alert alert-success"><?php echo $message[1]; ?></div>
+        <?php endif; ?>
+        <?php endforeach; ?>
+        <?php endif; ?>
+
+
+        <a href="<?php echo action('LembarsController@create'); ?>" class="btn btn-primary btn-sm pull-right">
+            <span class="glyphicon glyphicon-plus"></span> Tambah Kuis
+        </a>
+
+        <br/>
+        <br/>
+
+        <?php if ($lembars->isEmpty()): ?>
+        <div class="">
+            <?php if(!is_array($lembars)): ?>
+            <div class="alert alert-warning"><strong>Maaf</strong> daftar kuis tidak ditemukan</div>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
+
+        <?php if (!$lembars->isEmpty()): ?>
+        <table class="table table-striped table-responsive">
+            <thead>
+            <th>Judul</th>
+            <th>Keterangan</th>
+            <th>Kategori</th>
+            <th>Jumlah Soal</th>
+            <th>Batas Waktu</th>
+            <th>Acak Soal</th>
+            <th>Persediaan Soal</th>
+            <th>Oleh</th>
+            <th>Aksi</th>
+            </thead>
+            <tbody>
+            <?php foreach($lembars as $lembar): ?>
+            <tr>
+                <td>
+                    <?php echo $lembar->nama; ?>
+                </td>
+                <td>
+                    <p class="popover-hover" data-content="<?php echo $lembar->keterangan; ?>">
+                        <?php echo Str::limit(strip_tags($lembar->keterangan), 10); ?></p>
+                </td>
+                <td>
+                    <?php echo $lembar->kategori->nama; ?>
+                </td>
+                <td>
+                    <?php echo $lembar->limit; ?>
+                </td>
+                <td>
+                    <?php echo $lembar->batas_waktu; ?> Menit
+                </td>
+                <td>
+                    <?php echo $lembar->is_random ? 'Ya' : 'Tidak'; ?>
+                </td>
+                <td>
+                    <?php echo $lembar->SoalHasLembar->count(); ?>
+                </td>
+                <td>
+                    <?php echo $lembar->user->email; ?>
+                </td>
+                <td>
+                    <?php echo Form::open(array('method' => 'DELETE', 'action' => array('LembarsController@destroy',
+                    $lembar->id) )); ?>
+                    <a href="<?php echo action('LembarsController@show', array($lembar->id)); ?>" class="btn btn-primary btn-xs">
+                        <span class="glyphicon glyphicon-eye-open"></span> Lihat
+                    </a>
+                    <a href="<?php echo action('LembarsController@edit', array($lembar->id)); ?>" class="btn btn-warning btn-xs">
+                        <span class="glyphicon glyphicon-pencil"></span> Edit
+                    </a>
+                    <button type="submit" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span>
+                        Hapus
+                    </button>
+                    <?php echo Form::close(); ?>
+
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <?php echo $lembars->links(); ?>
+        <?php endif; ?>
+
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

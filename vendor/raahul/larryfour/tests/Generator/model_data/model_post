@@ -1,0 +1,22 @@
+<?php
+
+class Post extends Eloquent
+{
+    public $timestamps = true;
+
+    public function user()
+    {
+        return $this->belongsTo('User');
+    }
+
+    public function images()
+    {
+        return $this->morphMany('Image', 'imageable');
+    }
+
+    public function comments()
+    {
+        return $this->belongsToMany('Comment')->withPivot('name', 'type')->withTimestamps();
+    }
+
+}

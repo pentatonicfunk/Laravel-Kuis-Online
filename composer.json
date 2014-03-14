@@ -1,0 +1,46 @@
+{
+	"name": "laravel/laravel",
+	"description": "The Laravel Framework.",
+	"keywords": ["framework", "laravel"],
+	"license": "MIT",
+	"require": {
+		"laravel/framework": "4.1.*",
+        "cartalyst/sentry": "2.0.*",
+        "way/generators": "dev-master",
+        "raahul/larryfour": "1.*",
+        "doctrine/dbal": "~2.3"
+	},
+	"autoload": {
+		"classmap": [
+			"app/commands",
+			"app/controllers",
+			"app/models",
+			"app/models",
+			"app/database/migrations",
+			"app/database/seeds",
+			"vendor/cartalyst/sentry/src/Cartalyst/Sentry/Users/Eloquent/User.php",
+			"app/tests/TestCase.php"
+		],
+        "psr-0": {
+            "Authority": "app/"
+        }
+
+	},
+	"scripts": {
+		"post-install-cmd": [
+			"php artisan clear-compiled",
+			"php artisan optimize"
+		],
+		"post-update-cmd": [
+			"php artisan clear-compiled",
+			"php artisan optimize"
+		],
+		"post-create-project-cmd": [
+			"php artisan key:generate"
+		]
+	},
+	"config": {
+		"preferred-install": "dist"
+	},
+	"minimum-stability": "dev"
+}

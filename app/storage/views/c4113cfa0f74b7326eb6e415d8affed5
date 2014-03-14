@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+    <?php echo $__env->make('head', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+</head>
+<body>
+
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Navigasi</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="<?php echo action('DashboardController@index'); ?>">KUIS ONLINE</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <?php if (Sentry::getUser()->hasAccess('admin')): ?>
+                <li class="dropdown <?php echo Request::is('soals*') ? 'active' : ''; ?>">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Soal <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<?php echo action('SoalsController@index'); ?>">Daftar Soal</a></li>
+                        <li><a href="<?php echo action('SoalsController@create'); ?>">Tambah Soal</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown <?php echo Request::is('lembars*') ? 'active' : ''; ?>">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Kuis <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<?php echo action('LembarsController@index'); ?>">Daftar Kuis</a></li>
+                        <li><a href="<?php echo action('LembarsController@create'); ?>">Tambah Kuis</a></li>
+                    </ul>
+                </li>
+                <?php endif; ?>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active dropdown">
+                    <a data-toggle="dropdown" href="#"><?php echo Sentry::getUser()->email; ?><span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="<?php echo URL::route('logout'); ?>">Logout</a></li>
+                    </ul>
+
+                </li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</div>
+
+<div class="container">
+    <?php echo $__env->yieldContent('content'); ?>
+
+</div>
+<!-- /container -->
+
+
+<?php echo $__env->make('footer', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+</body>
+</html>

@@ -1,0 +1,35 @@
+
+<?php /* Web site Title */ ?>
+<?php $__env->startSection('title'); ?>
+Log In
+<?php $__env->stopSection(); ?>
+
+<?php /* Content */ ?>
+<?php $__env->startSection('content'); ?>
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <?php echo Form::open(array('action' => 'SessionController@store')); ?>
+
+        <h2 class="form-signin-heading">Sign In</h2>
+
+        <div class="form-group <?php echo ($errors->has('email')) ? 'has-error' : ''; ?>">
+            <?php echo Form::text('email', null, array('class' => 'form-control', 'placeholder' => 'Email', 'autofocus')); ?>
+            <?php echo ($errors->has('email') ? $errors->first('email') : ''); ?>
+        </div>
+
+        <div class="form-group <?php echo ($errors->has('password')) ? 'has-error' : ''; ?>">
+            <?php echo Form::password('password', array('class' => 'form-control', 'placeholder' => 'Password')); ?>
+            <?php echo ($errors->has('password') ? $errors->first('password') : ''); ?>
+        </div>
+
+        <label class="checkbox">
+            <?php echo Form::checkbox('rememberMe', 'rememberMe'); ?> Remember me
+        </label>
+        <?php echo Form::submit('Sign In', array('class' => 'btn btn-primary')); ?>
+        <a class="btn btn-link" href="<?php echo route('forgotPasswordForm'); ?>">Forgot Password</a>
+        <?php echo Form::close(); ?>
+    </div>
+</div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

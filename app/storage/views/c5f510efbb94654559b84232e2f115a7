@@ -1,0 +1,214 @@
+<?php $__env->startSection('content'); ?>
+<!-- Main component for a primary marketing message or call to action -->
+
+<div class="panel panel-default">
+<div class="panel-heading">
+    <h2>Detail Kuis
+        <small><?php echo $lembar->nama; ?></small>
+        <?php if (Sentry::getUser()->hasAccess('admin')): ?>
+        <a href="<?php echo action('LembarsController@index'); ?>" class="btn btn-default btn-xs">
+            <span class="glyphicon glyphicon-th-list"></span> Daftar Kuis
+        </a>
+        <?php endif; ?>
+    </h2>
+</div>
+<div class="panel-body">
+
+    <?php if (Session::has('messages')): ?>
+    <?php foreach (Session::get('messages') as $message): ?>
+    <?php if ($message[0] == 'error'): ?>
+    <div class="alert alert-danger"><?php echo $message[1]; ?></div>
+    <?php elseif ($message[0] == 'success'): ?>
+    <div class="alert alert-success"><?php echo $message[1]; ?></div>
+    <?php endif; ?>
+    <?php endforeach; ?>
+    <?php endif; ?>
+
+    <?php if (Sentry::getUser()->hasAccess('admin')): ?>
+    <?php echo Form::open(array('method' => 'DELETE', 'action' => array('LembarsController@destroy', $lembar->id), 'class'
+    =>
+    'pull-right' )); ?>
+    <a href="<?php echo action('LembarsController@edit', array($lembar->id)); ?>" class="btn btn-warning btn-xs">
+        <span class="glyphicon glyphicon-pencil"></span> Edit
+    </a>
+    <button type="submit" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Hapus
+    </button>
+    <?php echo Form::close(); ?>
+
+    <br/>
+    <br/>
+    <?php endif; ?>
+
+
+    <blockquote class="pull-right">
+        <div class="btn-default btn-xs pull-right popover-hover" data-content="dibuat oleh">
+            <span class="glyphicon glyphicon-user"></span> <?php echo $lembar->user->email; ?>
+        </div>
+        <div class="clearfix"></div>
+        <div class="btn-default btn-xs pull-right popover-hover" data-content="dibuat pada">
+            <span class="glyphicon glyphicon-plus"></span> <?php echo date("d F Y H:i",strtotime($lembar->created_at)); ?>
+        </div>
+        <div class="clearfix"></div>
+        <div class="btn-default btn-xs pull-right popover-hover" data-content="diperbaharui pada">
+            <span class="glyphicon glyphicon-pencil"></span> <?php echo date("d F Y H:i",strtotime($lembar->updated_at)); ?>
+        </div>
+    </blockquote>
+
+    <div class="clearfix"></div>
+    <dl class="dl-horizontal">
+        <dt>Keterangan</dt>
+        <dd><?php echo $lembar->keterangan; ?></dd>
+        <dt>Kategori</dt>
+        <dd><?php echo $lembar->kategori->nama; ?></dd>
+        <dt>Jumlah Soal</dt>
+        <dd><?php echo $lembar->limit; ?></dd>
+        <dt>Batas Waktu</dt>
+        <dd><?php echo $lembar->batas_waktu; ?> Menit</dd>
+        <dt>Acak Soal</dt>
+        <dd><?php echo $lembar->is_random ? 'Ya' : 'Tidak'; ?></dd>
+
+    </dl>
+
+
+    <?php if (Sentry::getUser()->hasAccess('admin')): ?>
+    <hr/>
+    <!-- Jawaban group-->
+    <blockquote>
+        <p>Persediaan Soal</p>
+    </blockquote>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#soals" data-toggle="tab">Persediaan Soal (<?php echo $soalhaslembar->count(); ?>)</a></li>
+        <li><a href="#banksoal" data-toggle="tab">Bank Soal (<?php echo $banksoal->count(); ?> / <?php echo $countBankSoal; ?>)</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="soals">
+            <br/>
+            <?php if ($soalhaslembar->isEmpty()): ?>
+            <div class="alert alert-warning">Belum ada persediaan soal</div>
+            <?php else: ?>
+            <table class="table table-striped table-responsive">
+                <thead>
+                <th>Pertanyaan</th>
+                <th>Max Point</th>
+                <th>Kategori</th>
+                <th>Durasi</th>
+                <th>Oleh</th>
+                <th>Aksi</th>
+                </thead>
+                <tbody>
+                <?php foreach($soalhaslembar as $soallembar): ?>
+                <tr>
+                    <td>
+                        <p class="popover-hover" data-content="<?php echo $soallembar->pertanyaan; ?>">
+                            <?php echo Str::limit(strip_tags($soallembar->pertanyaan), 30); ?></p>
+                    </td>
+                    <td>
+                        <?php echo $soallembar->getMaxPoint(); ?>
+                    </td>
+                    <td>
+                        <?php echo $soallembar->kategori->nama; ?>
+                    </td>
+                    <td>
+                        <?php echo $soallembar->durasi; ?> Menit
+                    </td>
+                    <td>
+                        <?php echo $soallembar->user->email; ?>
+                    </td>
+                    <td>
+                        <?php echo Form::open(array('method' => 'DELETE', 'action' =>
+                        array('SoalhaslembarsController@destroy', $lembar->id) )); ?>
+                        <?php echo Form::hidden('soal_id', $soallembar->id); ?>
+                        <button type="submit" class="btn btn-danger btn-xs"><span
+                                class="glyphicon glyphicon-remove"></span>
+                            Hapus dari Kuis
+                        </button>
+                        <?php echo Form::close(); ?>
+
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+            <?php endif; ?>
+        </div>
+        <div class="tab-pane fade" id="banksoal">
+            <br/>
+            <?php if (!$banksoal): ?>
+            <div class="alert alert-warning">Belum ada bank soal yang bisa digunakan</div>
+            <?php else: ?>
+            <table class="table table-striped table-responsive">
+                <thead>
+                <th>Pertanyaan</th>
+                <th>Max Point</th>
+                <th>Kategori</th>
+                <th>Durasi</th>
+                <th>Oleh</th>
+                <th>Aksi</th>
+                </thead>
+                <tbody>
+                <?php foreach($banksoal as $soal): ?>
+                <tr>
+                    <td>
+                        <p class="popover-hover" data-content="<?php echo $soal->pertanyaan; ?>">
+                            <?php echo Str::limit(strip_tags($soal->pertanyaan), 30); ?></p>
+                    </td>
+                    <td>
+                        <?php echo $soal->getMaxPoint(); ?>
+                    </td>
+                    <td>
+                        <?php echo $soal->kategori->nama; ?>
+                    </td>
+                    <td>
+                        <?php echo $soal->durasi; ?> Menit
+                    </td>
+                    <td>
+                        <?php echo $soal->user->email; ?>
+                    </td>
+                    <td>
+                        <?php echo Form::open(array('method' => 'POST', 'action' => array('SoalhaslembarsController@store',
+                        $lembar->id) )); ?>
+                        <?php echo Form::hidden('soal_id', $soal->id); ?>
+                        <button type="submit" class="btn btn-success btn-xs"><span
+                                class="glyphicon glyphicon-plus"></span>
+                            Tambahkan dalam kuis
+                        </button>
+                        <?php echo Form::close(); ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+            <?php endif; ?>
+        </div>
+    </div>
+
+
+    <div class="pull-right clearfix">
+        <a href="<?php echo action('UserjawablembarsController@show', array($lembar->id)); ?>" class="btn btn-success">
+            <span class="glyphicon glyphicon-align-left"></span> Lihat Ranking
+        </a>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <?php endif; ?>
+
+    <?php echo Form::open(array('method' => 'POST', 'action' => array('UjiansController@store'), 'class' =>
+    'pull-right' )); ?>
+    <?php echo Form::hidden('lembar_id', $lembar->id); ?>
+    <div class="clearfix">
+        <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-play"></span> Mulai mengerjakan
+            Kuis
+        </button>
+    </div>
+    <?php echo Form::close(); ?>
+
+
+</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

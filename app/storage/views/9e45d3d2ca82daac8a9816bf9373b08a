@@ -1,0 +1,215 @@
+<?php $__env->startSection('content'); ?>
+<!-- Main component for a primary marketing message or call to action -->
+<div class="panel panel-default">
+<div class="panel-heading">
+    <h2>Dashboard Kuis
+        <small>Online</small>
+    </h2>
+</div>
+
+<div class="panel-body">
+
+
+<div class="">
+
+    <?php if (Session::has('messages')): ?>
+    <?php foreach (Session::get('messages') as $message): ?>
+    <?php if ($message[0] == 'error'): ?>
+    <div class="alert alert-danger"><?php echo $message[1]; ?></div>
+    <?php elseif ($message[0] == 'success'): ?>
+    <div class="alert alert-success"><?php echo $message[1]; ?></div>
+    <?php endif; ?>
+    <?php endforeach; ?>
+    <?php endif; ?>
+
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h5>Daftar Pengambilan
+                <small>Kuis</small>
+            </h5>
+        </div>
+        <div class="panel-body">
+            <?php if ($userJawabLembars->isEmpty()): ?>
+            <div class="">
+                <?php if(!is_array($userJawabLembars)): ?>
+                <div class="alert alert-warning"><strong>Maaf</strong> daftar pengambilan kuis tidak ditemukan</div>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
+
+            <?php if (!$userJawabLembars->isEmpty()): ?>
+            <table class="table table-striped table-responsive">
+                <thead>
+                <th>Kuis</th>
+                <th>Waktu Pengambilan</th>
+                <th>Nilai Akhir</th>
+                <th>Aksi</th>
+                </thead>
+                <tbody>
+                <?php foreach($userJawabLembars as $userJawabLembar): ?>
+                <tr>
+                    <td>
+                        <?php echo $userJawabLembar->lembar->nama; ?>
+                    </td>
+                    <td>
+                        <?php echo date("d F Y H:i:s",strtotime($userJawabLembar->wkt_mulai)); ?>
+                    </td>
+                    <td>
+                        <?php echo $userJawabLembar->wkt_selesai ? $userJawabLembar->score : 'Belum Selesai'; ?>
+                    </td>
+                    <td>
+                        <?php if ($userJawabLembar->wkt_selesai): ?>
+                        <a href="<?php echo action('UjiansController@show', array($userJawabLembar->id)); ?>"
+                           class="btn btn-primary btn-xs">
+                            <span class="glyphicon glyphicon-eye-open"></span> Lihat
+                        </a>
+                        <a href="<?php echo action('UserjawablembarsController@show', array($userJawabLembar->lembar->id)); ?>"
+                           class="btn btn-success btn-xs">
+                            <span class="glyphicon glyphicon-align-left"></span> Lihat Ranking
+                        </a>
+                        <?php else: ?>
+                        <a href="<?php echo action('SoalujiansController@show', array($userJawabLembar->id, 0)); ?>"
+                           class="btn btn-info btn-xs">
+                            <span class="glyphicon glyphicon-play"></span> Lanjut Mengerjakan
+                        </a>
+                        <?php endif; ?>
+
+
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+            <?php endif; ?>
+
+
+        </div>
+    </div>
+</div>
+
+
+<?php if (Sentry::getUser()->hasAccess('admin')): ?>
+<div class="col-md-6">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h6>Daftar Soal
+                <small><?php echo $soalscount; ?></small>
+            </h6>
+        </div>
+        <div class="panel-body">
+
+            <?php if ($soals->isEmpty()): ?>
+            <div class="">
+                <?php if(!is_array($soals)): ?>
+                <div class="alert alert-warning"><strong>Maaf</strong> daftar soal tidak ditemukan</div>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
+
+            <?php if (!$soals->isEmpty()): ?>
+            <table class="table table-striped table-responsive">
+                <thead>
+                <th>Pertanyaan</th>
+                <th>Kategori</th>
+                <th>Max Point</th>
+                <th>Durasi</th>
+                </thead>
+                <tbody>
+                <?php foreach($soals as $soal): ?>
+                <tr>
+                    <td>
+                        <p class="popover-hover" data-content="<?php echo $soal->pertanyaan; ?>">
+                            <?php echo Str::limit(strip_tags($soal->pertanyaan), 30); ?></p>
+                    </td>
+                    <td>
+                        <?php echo $soal->getMaxPoint(); ?>
+                    </td>
+                    <td>
+                        <?php echo $soal->kategori->nama; ?>
+                    </td>
+                    <td>
+                        <?php echo $soal->durasi; ?> Menit
+                    </td>
+                    <td>
+                        <a href="<?php echo action('SoalsController@show', array($soal->id)); ?>"
+                           class="btn btn-primary btn-xs">
+                            <span class="glyphicon glyphicon-eye-open"></span> Lihat
+                        </a>
+
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+
+            <a href="<?php echo action('SoalsController@index'); ?>" class="btn btn-default btn-xs">
+                <span class="glyphicon glyphicon-th-list"></span> Daftar Soal Lengkap
+            </a>
+
+            <?php endif; ?>
+
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
+<div class="col-md-<?php echo Sentry::getUser()->hasAccess('admin') ? '6' : '12'; ?>">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h6>Daftar Kuis
+                <small><?php echo $lembarscount; ?></small>
+            </h6>
+        </div>
+        <div class="panel-body">
+
+            <?php if ($lembars->isEmpty()): ?>
+            <div class="">
+                <?php if(!is_array($lembars)): ?>
+                <div class="alert alert-warning"><strong>Maaf</strong> daftar kuis tidak ditemukan</div>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
+
+            <?php if (!$lembars->isEmpty()): ?>
+            <table class="table table-striped table-responsive">
+                <thead>
+                <th>Judul</th>
+                <th>Kategori</th>
+                <th>Jumlah Soal</th>
+                <th>Ambil</th>
+                </thead>
+                <tbody>
+                <?php foreach($lembars as $lembar): ?>
+                <tr>
+                    <td>
+                        <?php echo $lembar->nama; ?>
+                    </td>
+                    <td>
+                        <?php echo $lembar->kategori->nama; ?>
+                    </td>
+                    <td>
+                        <?php echo $lembar->limit; ?>
+                    </td>
+                    <td>
+                        <a href="<?php echo action('LembarsController@show', array($lembar->id)); ?>"
+                           class="btn btn-info btn-xs">
+                            <span class="glyphicon glyphicon-play"></span> Ambil
+                        </a>
+
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+
+            <?php endif; ?>
+
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

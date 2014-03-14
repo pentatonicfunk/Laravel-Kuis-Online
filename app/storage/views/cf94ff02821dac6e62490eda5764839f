@@ -1,0 +1,103 @@
+<?php $__env->startSection('content'); ?>
+<!-- Main component for a primary marketing message or call to action -->
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2>Detail Soal
+            <small><?php echo $soal->id; ?></small>
+            <a href="<?php echo action('SoalsController@index'); ?>" class="btn btn-default btn-xs">
+                <span class="glyphicon glyphicon-th-list"></span> Daftar Soal
+            </a>
+        </h2>
+    </div>
+    <div class="panel-body">
+
+        <?php if (Session::has('messages')): ?>
+        <?php foreach (Session::get('messages') as $message): ?>
+        <?php if ($message[0] == 'error'): ?>
+        <div class="alert alert-danger"><?php echo $message[1]; ?></div>
+        <?php elseif ($message[0] == 'success'): ?>
+        <div class="alert alert-success"><?php echo $message[1]; ?></div>
+        <?php endif; ?>
+        <?php endforeach; ?>
+        <?php endif; ?>
+
+        <?php echo Form::open(array('method' => 'DELETE', 'action' => array('SoalsController@destroy', $soal->id), 'class' =>
+        'pull-right' )); ?>
+        <a href="<?php echo action('SoalsController@edit', array($soal->id)); ?>" class="btn btn-warning btn-xs">
+            <span class="glyphicon glyphicon-pencil"></span> Edit
+        </a>
+        <button type="submit" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Hapus
+        </button>
+        <?php echo Form::close(); ?>
+
+        <br/>
+        <br/>
+
+
+        <blockquote class="pull-right">
+            <div class="btn-default btn-xs pull-right popover-hover" data-content="dibuat oleh">
+                <span class="glyphicon glyphicon-user"></span> <?php echo $soal->user->email; ?>
+            </div>
+            <div class="clearfix"></div>
+            <div class="btn-default btn-xs pull-right popover-hover" data-content="dibuat pada">
+                <span class="glyphicon glyphicon-plus"></span> <?php echo date("d F Y H:i",strtotime($soal->created_at)); ?>
+            </div>
+            <div class="clearfix"></div>
+            <div class="btn-default btn-xs pull-right popover-hover" data-content="diperbaharui pada">
+                <span class="glyphicon glyphicon-pencil"></span> <?php echo date("d F Y H:i",strtotime($soal->updated_at)); ?>
+            </div>
+        </blockquote>
+
+        <div class="clearfix"></div>
+
+        <blockquote>
+            <?php echo $soal->pertanyaan; ?>
+        </blockquote>
+
+        <div class="list-group">
+            <a class="list-group-item well-lg">
+                <?php if($soal->jawaban[0]->is_benar): ?>
+                <span class="glyphicon glyphicon-ok"></span>
+                <?php else: ?>
+                <span class="glyphicon glyphicon-remove"></span>
+                <?php endif; ?>
+                <strong>A.</strong> <?php echo $soal->jawaban[0]->jawaban; ?>
+                <span class="badge"><?php echo $soal->jawaban[0]->poin; ?></span>
+            </a>
+            <a class="list-group-item well-lg">
+                <?php if($soal->jawaban[1]->is_benar): ?>
+                <span class="glyphicon glyphicon-ok"></span>
+                <?php else: ?>
+                <span class="glyphicon glyphicon-remove"></span>
+                <?php endif; ?>
+                <strong>B.</strong> <?php echo $soal->jawaban[1]->jawaban; ?>
+                <span class="badge"><?php echo $soal->jawaban[1]->poin; ?></span>
+            </a>
+            <a class="list-group-item well-lg">
+                <?php if($soal->jawaban[2]->is_benar): ?>
+                <span class="glyphicon glyphicon-ok"></span>
+                <?php else: ?>
+                <span class="glyphicon glyphicon-remove"></span>
+                <?php endif; ?>
+                <strong>C.</strong> <?php echo $soal->jawaban[2]->jawaban; ?>
+                <span class="badge"><?php echo $soal->jawaban[2]->poin; ?></span>
+            </a>
+
+
+            <a class="list-group-item well-lg">
+                <?php if($soal->jawaban[3]->is_benar): ?>
+                <span class="glyphicon glyphicon-ok"></span>
+                <?php else: ?>
+                <span class="glyphicon glyphicon-remove"></span>
+                <?php endif; ?>
+                <span class="badge"><?php echo $soal->jawaban[3]->poin; ?></span>
+                <strong>D.</strong> <?php echo $soal->jawaban[3]->jawaban; ?>
+
+            </a>
+        </div>
+
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

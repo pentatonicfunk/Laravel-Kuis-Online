@@ -1,0 +1,8 @@
+<phpunit colors="true"
+         bootstrap="bootstrap.php">
+    <testsuites>
+        <testsuite name="Schema Extractor">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
